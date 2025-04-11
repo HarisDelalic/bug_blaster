@@ -20,6 +20,14 @@ export default function TicketForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const ticketData = {
+            id: new Date().getTime(), // good enough for now since we don't have proper unique id
+            title: title,
+            description: description,
+            priority: priority
+        }
+
         clearForm();
     }
 
