@@ -4,7 +4,23 @@ export default function ticketReducer(state, action) {
             return {...state, tickets: [...state.tickets, action.payload]}
         }
         case "DELETE_TICKET": {
-            return {...state, tickets: [state.tickets.filter(ticket => ticket.id !== action.payload.id)]}  // since action.payload is id of the ticket that should be deleted
+            if(state.editingTicket && state.editingTicket.id === action.payload) {
+                return {
+                    ...state,
+                    tickets: state.tickets.filter(
+                        (ticket) => ticket.id !== action.payload
+                    ),
+                    editingTicket: null
+                };
+
+            } else {
+                return {
+                    ...state,
+                    tickets: state.tickets.filter(
+                        (ticket) => ticket.id !== action.payload
+                    )
+                };
+            }
         }
         case "UPDATE_TICKET": {
             const updatedTickets = state.tickets.map(ticket =>
@@ -21,7 +37,14 @@ export default function ticketReducer(state, action) {
             return {
                 ...state,
                 tickets: updatedTickets,
+                editingTicket: null
             };
+        }
+        case "SET_EDITING_TICKET": {
+            return {...state, editingTicket: action.payload}
+        }
+        case "CLEAR_EDITING_TICKET": {
+
         }
         default: {
             return state

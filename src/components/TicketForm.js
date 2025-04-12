@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../styles.css';
 
-export default function TicketForm({dispatch}) {
+export default function TicketForm({dispatch, editingTicket}) {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [priority, setPriority] = useState('1')
@@ -11,6 +11,17 @@ export default function TicketForm({dispatch}) {
         2: 'Medium',
         3: 'High'
     }
+
+    useEffect(() => {
+            if (editingTicket) {
+                setTitle(editingTicket.title)
+                setDescription(editingTicket.description)
+                setPriority(editingTicket.priority)
+            } else {
+                clearForm();
+            }
+        }, [editingTicket]
+    )
 
     const clearForm = () => {
         setTitle('');
@@ -22,14 +33,14 @@ export default function TicketForm({dispatch}) {
         e.preventDefault();
 
         const ticketData = {
-            id: new Date().getTime(), // good enough for now since we don't have proper unique id
+            id: editingTicket ? editingTicket.id : new Date().getTime(), // good enough for now since we don't have proper unique id
             title: title,
             description: description,
             priority: priority
         }
 
         dispatch({
-            type: "ADD_TICKET",
+            type: editingTicket ? "UPDATE_TICKET" : "ADD_TICKET",
             payload: ticketData
         })
 
@@ -64,7 +75,7 @@ export default function TicketForm({dispatch}) {
                 ))}
             </fieldset>
 
-            <button type="submit">Submit</button>
+            <button className="button" type="submit">Submit</button>
         </form>
     )
 }
