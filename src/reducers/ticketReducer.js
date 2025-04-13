@@ -1,3 +1,5 @@
+import {sortByPriority} from "../utilities/ticketSorting";
+
 export default function ticketReducer(state, action) {
     switch (action.type) {
         case "ADD_TICKET": {
@@ -45,6 +47,11 @@ export default function ticketReducer(state, action) {
         }
         case "CLEAR_EDITING_TICKET": {
             return {...state, editingTicket: null}
+        }
+
+        case "SET_SORTING_PREFERENCE": {
+            const sortedTickets = sortByPriority(state.tickets, action.payload)
+            return {...state, sortingPreference: action.payload, tickets: sortedTickets}
         }
         default: {
             return state

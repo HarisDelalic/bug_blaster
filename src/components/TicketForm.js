@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import '../styles.css';
 
-export default function TicketForm({dispatch, editingTicket}) {
+export default function TicketForm({dispatch, editingTicket, sortingPreference}) {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [priority, setPriority] = useState('1')
@@ -87,6 +87,14 @@ export default function TicketForm({dispatch, editingTicket}) {
 
             {editingTicket && (
                 <button className="button" onClick={handleCancelEdit} type="submit">Cancel Edit</button>
-            )}</form>
+            )}
+
+            <select value={sortingPreference} onChange={e => dispatch({type: "SET_SORTING_PREFERENCE", payload: e.target.value})}>
+                <option value="High to Low">High to Low</option>
+                <option value="Low to High">Low to High</option>
+            </select>
+        </form>
+
+
     )
 }
